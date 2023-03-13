@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using static System.Collections.Specialized.BitVector32;
 
 namespace COMP003A.FinalProject
@@ -20,7 +21,7 @@ namespace COMP003A.FinalProject
             SectionSeparator("\t\t\tReview");
             */
         }
-        //-------------------------End Main---------------------------------//
+        //-------------------------Main End---------------------------------//
 
 
         //----------------------Module Section------------------------------//
@@ -46,7 +47,7 @@ namespace COMP003A.FinalProject
         /// </summary>
         /// <returns></returns>
         static void PersonalInfo()
-        {   
+        {
             string[] infoOnPerson = new string[4];
             Console.Write("What is your first name? ");
             infoOnPerson[0] = Convert.ToString(Console.ReadLine());
@@ -62,7 +63,7 @@ namespace COMP003A.FinalProject
         /// Method to ask questions and receive answers from user.
         /// </summary>
         /// <returns>answerKey for questions</returns>
-        static void Questions() 
+        static void Questions()
         {
             string[] answerKey = new string[10];
             Console.Write($"Thank you!\n\nWe have a questionairre for you to fill out before we approve of your visit.\n\n");
@@ -78,21 +79,32 @@ namespace COMP003A.FinalProject
             answerKey[4] = Convert.ToString(Console.ReadLine());
             Console.Write($"Question 6: Do you have any illegal pollen? ");
             answerKey[5] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 7: When was the last time you spoke in yezctlize to a member of the Spud race? ");
+            Console.Write($"Question 7: When was the last time you spoke in Yezctlize to a member of the Spuddock race? ");
             answerKey[6] = Convert.ToString(Console.ReadLine());
             Console.Write($"Question 8: What is life? ");
             answerKey[7] = Convert.ToString(Console.ReadLine());
             Console.Write($"Question 9: Do you identify as subterranean? ");
             answerKey[8] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 9: Were you ever too cool for school? ");
+            Console.Write($"Question 10: Were you ever too cool for school? ");
             answerKey[9] = Convert.ToString(Console.ReadLine());
 
             foreach (string answer in answerKey)
             {
-                Console.Write($"{answer}\n");
+                int i = 1;
+                Console.WriteLine($"\t{answer}\n");
+                i++;
             }
 
         }
-
+        /*
+        static bool NullCheck() 
+        {
+        
+        }
+        static bool SpecialCharCheck() 
+        {
+        
+        }
+        */
     }
 }
