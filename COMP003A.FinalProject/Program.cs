@@ -174,7 +174,7 @@ namespace COMP003A.FinalProject
             questionArray[4] = "How many years since your species went to war? ";
             questionArray[5] = "Do you have any illegal pollen? ";
             questionArray[6] = "When was the last time you spoke in Yezctlize to a member of the Spuddock race? ";
-            questionArray[7] = "What is life? ";
+            questionArray[7] = "What is the Answer to the Ultimate Question of Life, the Universe and Everything?";
             questionArray[8] = "Do you identify as subterranean? ";
             questionArray[9] = "Were you ever too cool for school? ";
 
