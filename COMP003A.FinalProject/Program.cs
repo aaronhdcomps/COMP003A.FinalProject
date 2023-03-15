@@ -1,7 +1,13 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using static System.Collections.Specialized.BitVector32;
+﻿/*
+ * Aaron Abramson
+ * COMP003A
+ * Final Project 
+ * A form for interplanetary travel throughout the galaxy
+ * Loose referece to the Hitchhikers Guide to the Galaxy
+*/
+
+
+using System.Security.Cryptography;
 
 namespace COMP003A.FinalProject
 {
@@ -10,21 +16,127 @@ namespace COMP003A.FinalProject
         //------------------------Main Start---------------------------------//
         static void Main(string[] args)
         {
-            /*
+            //Integers for form application
+            string firstName;
+            string lastName;
+            string gender;
+            int yearOB;
+            //Lists and arrays for application
+            List<string> identityInfo = new List<string>();
+            string[] questions = QuestionList();
+            string[] answers = new string[10];
+
+            //Beginning of form
             SectionSeparator("***Welcome to the Department of Interplanetary Customs and Travel***");
+
+            //Personal Info Questions Section
             SectionSeparator("\t\t\tPersonal Info");
-            PersonalInfo();
-            */
-            SectionSeparator("\t\t\tQuestionairre");
-            Questions();
-            /*
+
+            //Get first name
+            do
+            {
+                Console.Write("What is your first name? ");
+                firstName = Console.ReadLine();
+            } while (NullChecker(firstName) == true);
+            identityInfo.Add(firstName);
+
+            //Get last name
+            do
+            {
+                Console.Write("What is your last name? ");
+                lastName = Console.ReadLine();
+            } while (NullChecker(lastName) == true);
+            identityInfo.Add(lastName);
+            
+            //Get gender
+            do {
+                    do
+                    {
+                            Console.WriteLine($"What is your gender:\nEnter M for Male | F for Female | O for Other | N if not listed");
+                            gender = Console.ReadLine();
+                            gender = gender.ToUpper();
+                    } while (NullChecker(gender) == true);
+                
+                    char genderAnswer = Convert.ToChar(gender);
+                
+                switch (genderAnswer)
+                    {
+                        case 'F':
+                            identityInfo.Add("Female");
+                            break;
+                        case 'M':
+                            identityInfo.Add("Male");
+                            break;
+                        case 'O':
+                            identityInfo.Add("Other");
+                            break;
+                        case 'N':
+                            identityInfo.Add("Not listed");
+                            break;
+                        default:
+                            Console.WriteLine("Please submit a valid answer.");
+                            break;
+                    }
+
+            } while (NullChecker(identityInfo[2]) == true);
+
+            //Get year born
+            do
+            {
+                Console.WriteLine($"What year were you born? ");
+                yearOB = Convert.ToInt32(Console.ReadLine());
+                if (yearOB <= 1900)
+                {
+                    Console.WriteLine("");
+                }
+            } while (yearOB <= 1900);
+
+            //Questionnaire section
+            SectionSeparator("\t\t\tQuestionnaire");
+            Console.WriteLine("Thank you for that information.\n");
+            
+            //Questions to user and answers from user
+            answers = AskQ(QuestionList());
+            
+            //Review section
             SectionSeparator("\t\t\tReview");
-            */
+            
+            //
+            Console.WriteLine("\nHere is your information...");
+            Console.WriteLine($"\n{identityInfo[1]}, {identityInfo[0]}");
+            Console.WriteLine($"Gender is {identityInfo[2]}");
+            Console.WriteLine($"Age: {AgeCalc(yearOB)} years old");
+
+            //Array traversal for questions and answer review
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine($"Question {i + 1} was\n{questions[i]}");
+                Console.WriteLine($"Your response to Question {i + 1}.......{answers[i]}");
+            }
+
+            //Method to determine if you are held for further questioning
+            HoldForFurtherQuestions();
+
+
         }
         //-------------------------Main End---------------------------------//
 
 
         //----------------------Module Section------------------------------//
+
+
+        /// <summary>
+        /// Checks for null or empty string responses
+        /// </summary>
+        /// <param name="response">Response from user to check if null or empty</param>
+        /// <returns>True if null or empty</returns>
+        static bool NullChecker(string response)
+        {
+            bool result;
+            result = response == null || response == string.Empty;
+            return result;
+        }
+        
         /// <summary>
         /// Creates seperator for each section
         /// </summary>
@@ -35,76 +147,82 @@ namespace COMP003A.FinalProject
            PadRight(68, '*'));
         }
 
-        static int AgeCalc(string DOB)
+        /// <summary>
+        /// Calculates age from year provided by user
+        /// </summary>
+        /// <param name="yearOB">Users year of birth</param>
+        /// <returns></returns>
+        static int AgeCalc(int yearOB)
         {
-            int age = 0;
-
-
+            DateTime today = DateTime.Today;
+            int age = today.Year - yearOB;
+            
             return age;
         }
+
         /// <summary>
-        /// Method to ask questions and receive answers from user.
+        /// Method to load questions in array and pass to global array
         /// </summary>
-        /// <returns></returns>
-        static void PersonalInfo()
+        /// <returns>Array holding questions is returned</returns>
+        static string[] QuestionList()
         {
-            string[] infoOnPerson = new string[4];
-            Console.Write("What is your first name? ");
-            infoOnPerson[0] = Convert.ToString(Console.ReadLine());
-            Console.Write("What is your last name? ");
-            infoOnPerson[1] = Convert.ToString(Console.ReadLine());
-            Console.WriteLine($"What is your gender:\nEnter M for Male | F for Female | O for Other");
-            infoOnPerson[2] = Convert.ToString(Console.ReadLine());
-            Console.WriteLine("Please enter your date of birth: MM/DD/YYYY");
-            infoOnPerson[3] = Convert.ToString(Console.ReadLine());
+            string[] questionArray = new string[10];
+            questionArray[0] = "What color is your blood? ";
+            questionArray[1] = "Are you a plant? ";
+            questionArray[2] = "Have you ever had inter-species relations with a mop? ";
+            questionArray[3] = "Do you exist in a hive state? ";
+            questionArray[4] = "How many years since your species went to war? ";
+            questionArray[5] = "Do you have any illegal pollen? ";
+            questionArray[6] = "When was the last time you spoke in Yezctlize to a member of the Spuddock race? ";
+            questionArray[7] = "What is life? ";
+            questionArray[8] = "Do you identify as subterranean? ";
+            questionArray[9] = "Were you ever too cool for school? ";
+
+            return questionArray;
         }
 
         /// <summary>
-        /// Method to ask questions and receive answers from user.
+        /// Method to ask questions and record answers.
         /// </summary>
-        /// <returns>answerKey for questions</returns>
-        static void Questions()
+        /// <param name="questions">Questions to ask from an array.</param>
+        /// <returns>answer array.</returns>
+        static string[] AskQ(string[] questions) 
         {
-            string[] answerKey = new string[10];
-            Console.Write($"Thank you!\n\nWe have a questionairre for you to fill out before we approve of your visit.\n\n");
-            Console.Write($"Question 1: What color is your blood? ");
-            answerKey[0] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 2: Are you a plant? ");
-            answerKey[1] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 3: Have you ever had inter-species relations with a broom? ");
-            answerKey[2] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 4: Do you exist in a hive state? ");
-            answerKey[3] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 5: How many years since your species went to war? ");
-            answerKey[4] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 6: Do you have any illegal pollen? ");
-            answerKey[5] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 7: When was the last time you spoke in Yezctlize to a member of the Spuddock race? ");
-            answerKey[6] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 8: What is life? ");
-            answerKey[7] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 9: Do you identify as subterranean? ");
-            answerKey[8] = Convert.ToString(Console.ReadLine());
-            Console.Write($"Question 10: Were you ever too cool for school? ");
-            answerKey[9] = Convert.ToString(Console.ReadLine());
-
-            foreach (string answer in answerKey)
+            string[] answers = new string[10];
+            for (int i = 0; i < 10; i++)
             {
-                int i = 1;
-                Console.WriteLine($"\t{answer}\n");
-                i++;
+                string userResponse = "";
+                do
+                {                    
+                    Console.WriteLine($"Question {i + 1}: {questions[i]}");
+                    userResponse = Console.ReadLine();
+                }
+                while (NullChecker(userResponse) == true);
+                answers[i] = userResponse;
+
+            }
+            return answers;
+        }
+
+        /// <summary>
+        /// Method to determine if you are held for further questioning by using a random number
+        /// If the number is even, you will be held for further questioning
+        /// If the number is odd, you are free to go
+        /// </summary>
+        static void HoldForFurtherQuestions() 
+        {
+            Random holdNo = new Random();
+            int random = holdNo.Next(1, 20);
+            if (random % 2 == 0) 
+            {
+                Console.WriteLine("\n\n\t\tWe need you come with us, now.");
+            }
+            else  
+            {
+                Console.WriteLine("\n\n\t\tEverything seems in order. Have a nice trip.");
             }
 
         }
-        /*
-        static bool NullCheck() 
-        {
         
-        }
-        static bool SpecialCharCheck() 
-        {
-        
-        }
-        */
     }
 }
