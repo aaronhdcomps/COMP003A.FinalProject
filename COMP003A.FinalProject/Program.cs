@@ -6,8 +6,6 @@
  * Loose referece to the Hitchhikers Guide to the Galaxy
 */
 
-using System.Text.RegularExpressions;
-
 namespace COMP003A.FinalProject
 {
     internal class Program
