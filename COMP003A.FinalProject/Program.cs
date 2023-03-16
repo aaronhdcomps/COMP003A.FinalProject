@@ -6,6 +6,8 @@
  * Loose referece to the Hitchhikers Guide to the Galaxy
 */
 
+using System.Text.RegularExpressions;
+
 namespace COMP003A.FinalProject
 {
     internal class Program
@@ -17,7 +19,9 @@ namespace COMP003A.FinalProject
             string firstName;
             string lastName;
             string gender;
-            int yearOB;
+            int yearOB = 0;
+            DateTime today = DateTime.Today;
+
             //Lists and arrays for application
             List<string> identityInfo = new List<string>();
             string[] questions = QuestionList();
@@ -34,63 +38,76 @@ namespace COMP003A.FinalProject
             {
                 Console.Write("What is your first name? ");
                 firstName = Console.ReadLine();
-            } while (NullChecker(firstName) == true);
+            } while (String.IsNullOrEmpty(firstName) == true || InputInvalid(firstName) == true);
             identityInfo.Add(firstName);
 
+            
             //Get last name
+
             do
             {
                 Console.Write("What is your last name? ");
                 lastName = Console.ReadLine();
-            } while (NullChecker(lastName) == true);
+            } while (String.IsNullOrEmpty(lastName) == true || InputInvalid(lastName) == true);
             identityInfo.Add(lastName);
-            
-            //Get gender
-             
-                do 
+
+
+            //Gender selection    
+            do
+            {
+                Console.WriteLine($"What is your gender:\nEnter M for Male " +
+                                    $"| F for Female | O for Other | N if not listed");
+                gender = Console.ReadLine();
+                gender = gender.ToUpper();
+
+                public bool IsStringInvalid(string text)
                 {
-                        do
-                        {
-                            Console.WriteLine($"What is your gender:\nEnter M for Male " +
-                                                $"| F for Female | O for Other | N if not listed");
-                            gender = Console.ReadLine();
-                            gender = gender.ToUpper();
-                        } while (NullChecker(gender) == true);
-                    
-                        char genderAnswer = Convert.ToChar(gender);
-                    
-                        switch (genderAnswer)
-                        {
-                           case 'F':
-                               identityInfo[2] = "Female";
-                               break;
-                           case 'M':
-                               identityInfo[2] = "Male";
-                               break;
-                           case 'O':
-                               identityInfo[2] = "Other";
-                               break;
-                           case 'N':
-                               identityInfo[2] = "Not listed";
-                               break;
-                           default:
-                               Console.WriteLine("Please submit a valid answer.");
-                               break;
-                        }
-                        
-                } while (NullChecker(identityInfo[2]) == true);
-                
+
+                    if (text != null && text.Length > 4 && !Regex.IsMatch(text, textCodeFormat))
+                    {
+                        return true;
+                    }
+
+                    return false;
+
+                }
+
+                char genderAnswer = Convert.ToChar(gender);
+                              
+                switch (genderAnswer)
+                {
+                    case 'F':
+                        identityInfo.Add("Female");
+                        break;
+                    case 'M':
+                        identityInfo.Add("Male");
+                        break;
+                    case 'O':
+                        identityInfo.Add("Other");
+                        break;
+                    case 'N':
+                        identityInfo.Add("Not listed");
+                        break;
+                    default:
+                        Console.WriteLine("Please submit a valid answer.");
+                        break;
+                }
+            } while (String.IsNullOrEmpty(gender) == true);
+
+
 
             //Get year born
             do
-            {
-                Console.WriteLine($"What year were you born? ");
-                yearOB = Convert.ToInt32(Console.ReadLine());
-                if (yearOB <= 1900)
+            {   Console.WriteLine($"What year were you born? ");
+
+                try
                 {
-                    Console.WriteLine("");
+                    yearOB = Convert.ToInt32(Console.ReadLine());
                 }
-            } while (yearOB <= 1900);
+                catch (Exception) { Console.WriteLine("Invalid input. Try again"); }
+                
+            } while (YearInRange(yearOB) == false);
+
 
             //Questionnaire section
             SectionSeparator("\t\t\tQuestionnaire");
@@ -106,13 +123,13 @@ namespace COMP003A.FinalProject
             Console.WriteLine("\nHere is your information...");
             Console.WriteLine($"\n{identityInfo[1]}, {identityInfo[0]}");
             Console.WriteLine($"Gender is {identityInfo[2]}");
-            Console.WriteLine($"Age: {AgeCalc(yearOB)} years old");
+            Console.WriteLine($"Age: {AgeCalc(yearOB)} years old\n");
 
             //Array traversal for questions and answer review
             for (int i = 0; i < 10; i++)
             {
                 Console.WriteLine($"Question {i + 1} was\n{questions[i]}");
-                Console.WriteLine($"Your response to Question {i + 1}.......{answers[i]}");
+                Console.WriteLine($"Your response to Question {i + 1}.......{answers[i]}\n");
             }
 
             //Method to determine if you are held for further questioning
@@ -126,16 +143,43 @@ namespace COMP003A.FinalProject
         //----------------------Module Section------------------------------//
 
 
+
         /// <summary>
-        /// Checks for null or empty string responses
+        /// Validates if user response contains numbers or special characters.
         /// </summary>
-        /// <param name="response">Response from user to check if null or empty</param>
-        /// <returns>True if null or empty</returns>
-        static bool NullChecker(string response)
+        /// <param name="response">User response</param>
+        /// <returns>True or false</returns>
+        static bool InputInvalid(string response)
         {
-            bool result;
-            result = response == null || response == string.Empty;
-            return result;
+
+            if (response.Any(ch => !char.IsDigit(ch)) == false)
+            {
+                return true;
+            }
+            else if (Regex.IsMatch(response, @"^[a-zA-z]+$") == false)
+            {
+                return true;
+            }
+            else return false;
+
+        }
+
+        /// <summary>
+        /// Method checks that year is in range.
+        /// </summary>
+        /// <param name="year">Checks year against range</param>
+        /// <returns>True or false</returns>
+        static bool YearInRange(int year) 
+        
+        {
+            DateTime today = DateTime.Today;
+            
+            if (year <= 1900 || year >= today.Year) 
+            {
+            Console.WriteLine("Invalid year. Try Again.");
+                return false; 
+            }
+            else return true;
         }
         
         /// <summary>
@@ -198,7 +242,7 @@ namespace COMP003A.FinalProject
                     Console.WriteLine($"Question {i + 1}: {questions[i]}");
                     userResponse = Console.ReadLine();
                 }
-                while (NullChecker(userResponse) == true);
+                while (String.IsNullOrEmpty(userResponse) == true);
                 answers[i] = userResponse;
 
             }
@@ -213,14 +257,14 @@ namespace COMP003A.FinalProject
         static void HoldForFurtherQuestions() 
         {
             Random holdNo = new Random();
-            int random = holdNo.Next(1, 20);
+            int random = holdNo.Next(1, 2);
             if (random % 2 == 0) 
             {
-                Console.WriteLine("\n\n\t\tWe need you come with us, now.");
+                Console.WriteLine("\n\t- We need you come with us, now.");
             }
             else  
             {
-                Console.WriteLine("\n\n\t\tEverything seems in order. Have a nice trip.");
+                Console.WriteLine("\n\t- Everything seems in order. Have a nice trip.");
             }
 
         }
