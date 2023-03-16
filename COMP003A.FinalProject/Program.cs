@@ -6,9 +6,6 @@
  * Loose referece to the Hitchhikers Guide to the Galaxy
 */
 
-
-using System.Security.Cryptography;
-
 namespace COMP003A.FinalProject
 {
     internal class Program
@@ -49,36 +46,40 @@ namespace COMP003A.FinalProject
             identityInfo.Add(lastName);
             
             //Get gender
-            do {
-                    do
-                    {
-                            Console.WriteLine($"What is your gender:\nEnter M for Male | F for Female | O for Other | N if not listed");
+             
+                do 
+                {
+                        do
+                        {
+                            Console.WriteLine($"What is your gender:\nEnter M for Male " +
+                                                $"| F for Female | O for Other | N if not listed");
                             gender = Console.ReadLine();
                             gender = gender.ToUpper();
-                    } while (NullChecker(gender) == true);
+                        } while (NullChecker(gender) == true);
+                    
+                        char genderAnswer = Convert.ToChar(gender);
+                    
+                        switch (genderAnswer)
+                        {
+                           case 'F':
+                               identityInfo[2] = "Female";
+                               break;
+                           case 'M':
+                               identityInfo[2] = "Male";
+                               break;
+                           case 'O':
+                               identityInfo[2] = "Other";
+                               break;
+                           case 'N':
+                               identityInfo[2] = "Not listed";
+                               break;
+                           default:
+                               Console.WriteLine("Please submit a valid answer.");
+                               break;
+                        }
+                        
+                } while (NullChecker(identityInfo[2]) == true);
                 
-                    char genderAnswer = Convert.ToChar(gender);
-                
-                switch (genderAnswer)
-                    {
-                        case 'F':
-                            identityInfo.Add("Female");
-                            break;
-                        case 'M':
-                            identityInfo.Add("Male");
-                            break;
-                        case 'O':
-                            identityInfo.Add("Other");
-                            break;
-                        case 'N':
-                            identityInfo.Add("Not listed");
-                            break;
-                        default:
-                            Console.WriteLine("Please submit a valid answer.");
-                            break;
-                    }
-
-            } while (NullChecker(identityInfo[2]) == true);
 
             //Get year born
             do
@@ -101,7 +102,7 @@ namespace COMP003A.FinalProject
             //Review section
             SectionSeparator("\t\t\tReview");
             
-            //
+            //Provides review of info on screen.
             Console.WriteLine("\nHere is your information...");
             Console.WriteLine($"\n{identityInfo[1]}, {identityInfo[0]}");
             Console.WriteLine($"Gender is {identityInfo[2]}");
