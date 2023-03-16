@@ -3,7 +3,7 @@
  * COMP003A
  * Final Project 
  * A form for interplanetary travel throughout the galaxy
- * Loose referece to the Hitchhikers Guide to the Galaxy
+ * Loose reference to the Hitchhikers Guide to the Galaxy
 */
 
 namespace COMP003A.FinalProject
