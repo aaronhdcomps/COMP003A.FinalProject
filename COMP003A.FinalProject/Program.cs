@@ -38,7 +38,12 @@ namespace COMP003A.FinalProject
             {
                 Console.Write("What is your first name? ");
                 firstName = Console.ReadLine();
-            } while (String.IsNullOrEmpty(firstName) == true || InputInvalid(firstName) == true);
+                if (NameInvalid(firstName) == true)
+                {
+                    Console.WriteLine("Input invalid. Try again.");
+                }
+
+            } while (NameInvalid(firstName) == true);
             identityInfo.Add(firstName);
 
             
@@ -48,7 +53,12 @@ namespace COMP003A.FinalProject
             {
                 Console.Write("What is your last name? ");
                 lastName = Console.ReadLine();
-            } while (String.IsNullOrEmpty(lastName) == true || InputInvalid(lastName) == true);
+                if (NameInvalid(lastName) == true) 
+                {
+                    Console.WriteLine("Input invalid. Try again.");
+                }
+
+            } while (NameInvalid(lastName) == true);
             identityInfo.Add(lastName);
 
 
@@ -59,52 +69,70 @@ namespace COMP003A.FinalProject
                                     $"| F for Female | O for Other | N if not listed");
                 gender = Console.ReadLine();
                 gender = gender.ToUpper();
+                char genderAnswer = '0';
 
-                public bool IsStringInvalid(string text)
+                if (String.IsNullOrEmpty(gender) == true)//=======First check on response to gender is if Empty or Null.
+
                 {
-
-                    if (text != null && text.Length > 4 && !Regex.IsMatch(text, textCodeFormat))
+                    Console.WriteLine("Invalid input. Try again");
+                }
+                else 
+                { 
+                    
+                    try //Try catch in case of failed char conversion.
                     {
-                        return true;
+                        genderAnswer = Convert.ToChar(gender);
+                    }
+                    catch(Exception) 
+                    {
+                        Console.WriteLine("Invalid input. Try again");
+                        gender = "";
                     }
 
-                    return false;
-
+                    switch (genderAnswer)
+                    {
+                        case 'F':
+                            identityInfo.Add("Female");
+                            break;
+                        case 'M':
+                            identityInfo.Add("Male");
+                            break;
+                        case 'O':
+                            identityInfo.Add("Other");
+                            break;
+                        case 'N':
+                            identityInfo.Add("Not listed");
+                            break;
+                        default:
+                            Console.WriteLine("Invalid input. Try again");
+                            gender = "";
+                            break;
+                    }
+                    
                 }
 
-                char genderAnswer = Convert.ToChar(gender);
-                              
-                switch (genderAnswer)
-                {
-                    case 'F':
-                        identityInfo.Add("Female");
-                        break;
-                    case 'M':
-                        identityInfo.Add("Male");
-                        break;
-                    case 'O':
-                        identityInfo.Add("Other");
-                        break;
-                    case 'N':
-                        identityInfo.Add("Not listed");
-                        break;
-                    default:
-                        Console.WriteLine("Please submit a valid answer.");
-                        break;
-                }
             } while (String.IsNullOrEmpty(gender) == true);
-
 
 
             //Get year born
             do
-            {   Console.WriteLine($"What year were you born? ");
+            {   
+                Console.WriteLine($"What year were you born? ");
 
                 try
                 {
-                    yearOB = Convert.ToInt32(Console.ReadLine());
+                  yearOB = Convert.ToInt32(Console.ReadLine());
                 }
-                catch (Exception) { Console.WriteLine("Invalid input. Try again"); }
+                
+                catch (Exception) 
+                { 
+                    yearOB = 0;
+                }
+                
+                if (YearInRange(yearOB) == false)
+                {
+                    Console.WriteLine("Invalid input. Try again");
+                }                                         
                 
             } while (YearInRange(yearOB) == false);
 
@@ -149,10 +177,13 @@ namespace COMP003A.FinalProject
         /// </summary>
         /// <param name="response">User response</param>
         /// <returns>True or false</returns>
-        static bool InputInvalid(string response)
+        static bool NameInvalid(string response)
         {
-
-            if (response.Any(ch => !char.IsDigit(ch)) == false)
+            if (String.IsNullOrEmpty(response) == true)
+            {
+                return true;
+            }
+            else if (response.Any(ch => !char.IsDigit(ch)) == false)
             {
                 return true;
             }
@@ -161,7 +192,6 @@ namespace COMP003A.FinalProject
                 return true;
             }
             else return false;
-
         }
 
         /// <summary>
@@ -173,13 +203,16 @@ namespace COMP003A.FinalProject
         
         {
             DateTime today = DateTime.Today;
-            
-            if (year <= 1900 || year >= today.Year) 
+
+            if (year <= 1900 || year >= today.Year)
             {
-            Console.WriteLine("Invalid year. Try Again.");
-                return false; 
+                return false;
             }
-            else return true;
+            else
+            {
+                return true;
+            }
+            
         }
         
         /// <summary>
